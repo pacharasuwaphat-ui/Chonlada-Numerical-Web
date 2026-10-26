@@ -67,7 +67,7 @@ export default function Login() {
       }
 
       // login สำเร็จแล้วเด้งไปหน้าที่ต้องการ
-      router.push("/home");
+      router.push("/root/graphical");
     } catch (error) {
       setMessage("Cannot connect to server");
     } finally {
