@@ -38,40 +38,6 @@ function calculateFx(equation: string, x: number): number {
     return Number.NaN;
   }
 }
-
-// function findBisectionRoot(
-//   equation: string,
-//   xl: number,
-//   xr: number,
-//   tolerance: number
-// ): { rows: IterationRow[]; points: Point[]; root: number } {
-//   if (xl >= xr) {
-//     throw new Error("xL must be less than xR.");
-//   }
-
-//   if (tolerance <= 0) {
-//     throw new Error("Error tolerance must be greater than zero.");
-//   }
-
-//   const rows: IterationRow[] = [];
-//   const points: Point[] = [];
-//   const maxIterations = 10000;
-
-//   let step = 1;
-//   let left = xl;
-//   let right = xr;
-//   let root = Number.NaN;
-//   let previousX = left;
-//   let previousFx = calculateFx(equation, previousX);
-//   let iteration = 0;
-//   let foundBracket = false;
-
-//   if (!Number.isFinite(previousFx)) {
-//     throw new Error("Cannot evaluate the equation at xL.");
-//   }
-
-//   points.push({ x: previousX, fx: previousFx });
-
   
 function findBisectionRoot(
   equation: string,
