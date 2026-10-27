@@ -27,6 +27,7 @@ export class RootService {
       equation: equation,
       xl: xl,
       xr: xr,
+      method : method,
     }).exec();
 
     if (existingRoot) {
@@ -55,6 +56,7 @@ export class RootService {
       userId: userid,
       equation: equation,
       x0: x0,
+      method : method,
     }).exec();
 
     if (existingRoot) {
