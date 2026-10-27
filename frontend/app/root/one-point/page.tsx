@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { evaluate } from "mathjs";
+import { evaluate , derivative  } from "mathjs";
 import axios from "axios";
 
 import Navbar from "@/component/root/Navbar";
@@ -39,7 +39,7 @@ function calculateFx(equation: string, x: number): number {
 }
 
 
-    function findOnePointIteration(
+  function findOnePointIteration(
     equation: string,
     x0: number,
     tolerance: number
@@ -104,9 +104,9 @@ function calculateFx(equation: string, x: number): number {
         currentX = nextX;
     }
 
-    throw new Error(
-        "Method did not converge within 100 iterations. Try a different initial guess or rearrange g(x)."
-    );
+      throw new Error(
+          "Method did not converge within 100 iterations. Try a different initial guess or rearrange g(x)."
+      );
     }
 
 
