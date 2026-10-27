@@ -2,7 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  allowedDevOrigins: ["192.168.56.1"],
+  allowedDevOrigins: process.env.IP
+  ? [process.env.IP]
+  : [],
   experimental: {
     agentFeedback: true,
   },

@@ -4,6 +4,8 @@
 import { useMemo, useState } from "react";
 
 export interface OldProblem {
+  _id: string;
+  userId: string;
   equation: string;
   xl: number | string;
   xr: number | string;
@@ -15,6 +17,7 @@ interface EquationHistoryProps {
   problems: OldProblem[];
   loading: boolean;
   onSelect: (problem: OldProblem) => void;
+  onDelete: (problem: OldProblem) => void;
   onCancel: () => void;
 }
 
@@ -22,10 +25,11 @@ export default function EquationHistory({
   problems,
   loading,
   onSelect,
+  onDelete,
   onCancel,
 }: EquationHistoryProps) {
   const [search, setSearch] = useState("");
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const filteredProblems = useMemo(
     () =>
@@ -61,7 +65,7 @@ export default function EquationHistory({
         value={search}
         onChange={(event) => {
           setSearch(event.target.value);
-          setSelectedIndex(null);
+          setSelectedId(null);
         }}
         placeholder="Search equations..."
         className="mb-4 w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none focus:border-violet-500 focus:ring-2 focus:ring-violet-100"
@@ -79,12 +83,11 @@ export default function EquationHistory({
         <div className="max-h-80 space-y-2 overflow-y-auto">
           {filteredProblems.map((problem) => {
             const originalIndex = problems.indexOf(problem);
-            const selected = selectedIndex === originalIndex;
-
+            const selected = selectedId === problem._id;
             return (
-              <label
-                key={`${originalIndex}-${problem.equation}`}
-                className={`flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition ${
+              <div
+                key={problem._id}
+                className={`flex items-start gap-3 rounded-xl border p-4 transition ${
                   selected
                     ? "border-violet-500 bg-violet-50 ring-2 ring-violet-100"
                     : "border-slate-200 hover:border-violet-300 hover:bg-slate-50"
@@ -94,7 +97,7 @@ export default function EquationHistory({
                   type="radio"
                   name="old-problem"
                   checked={selected}
-                  onChange={() => setSelectedIndex(originalIndex)}
+                  onChange={() => setSelectedId(problem._id)}
                   className="mt-1 accent-violet-600"
                 />
 
@@ -102,6 +105,7 @@ export default function EquationHistory({
                   <p className="break-words font-semibold text-slate-900">
                     f(x) = {problem.equation}
                   </p>
+
                   <div className="mt-2 flex flex-wrap gap-2 text-xs text-slate-500">
                     <span className="rounded-md bg-slate-100 px-2 py-1">
                       xL: {problem.xl}
@@ -114,23 +118,28 @@ export default function EquationHistory({
                     </span>
                   </div>
                 </div>
-              </label>
+
+                <button
+                  type="button"
+                  disabled={loading}
+                  onClick={() => onDelete(problem)}
+                  className="shrink-0 rounded-lg bg-red-100 px-3 py-2 text-sm font-medium text-red-700 hover:bg-red-200 disabled:opacity-50"
+                >
+                  Delete
+                </button>
+              </div>
             );
+
           })}
         </div>
       )}
 
       <button
         type="button"
-        disabled={
-          loading ||
-          selectedIndex === null ||
-          !problems[selectedIndex]
-        }
+        disabled={loading || selectedId === null}
         onClick={() => {
-          if (selectedIndex !== null && problems[selectedIndex]) {
-            onSelect(problems[selectedIndex]);
-          }
+          const problem = problems.find((p) => p._id === selectedId);
+          if (problem) onSelect(problem);
         }}
         className="mt-5 w-full rounded-xl bg-violet-600 px-5 py-3 font-semibold text-white transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-40"
       >

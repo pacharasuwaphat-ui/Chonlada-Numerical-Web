@@ -180,16 +180,16 @@ export default function GraphicalPage() {
         const userId = user.id;
 
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/root/two/${userId}/graphical`
+          `${process.env.NEXT_PUBLIC_API_URL}/root/${userId}/graphical`
         );
-        console.log(res)
+        // console.log(res)
         // return
         if (!res.ok) {
           setMessage("Failed to fetch history");
           return;
         }
         const data = await res.json();
-        console.log(data)
+        // console.log(data)
 
         if (!Array.isArray(data)) {
           console.log("err")
@@ -197,7 +197,7 @@ export default function GraphicalPage() {
         }
         
         setHistory(data);
-        console.log(history)
+        // console.log(history)
     } catch {
       setMessage(
         "Could not load previous problems. Please check the API server."
@@ -305,6 +305,49 @@ export default function GraphicalPage() {
     }
   }
 
+  async function deleteOldProblem(problem: OldProblem) {
+    const confirmed = window.confirm(
+      `ต้องการลบโจทย์ "${problem.equation}" ใช่หรือไม่?`
+    );
+
+    if (!confirmed) return;
+
+    try {
+      const userString = localStorage.getItem("user");
+      if (!userString) {
+        setMessage("กรุณาเข้าสู่ระบบก่อน");
+        return;
+      }
+
+      
+      const user = JSON.parse(userString);
+      // console.log(problem)
+      // console.log(user.id)
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/root/${problem._id}/${user.id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      // const data = await res.json();
+      // console.log(data)
+      if (!res.ok) {
+        throw new Error("ลบโจทย์ไม่สำเร็จ");
+      }
+
+      fetchDatabase()
+
+      setMessage("ลบโจทย์สำเร็จ");
+    } catch (error) {
+      setMessage(
+        error instanceof Error
+          ? error.message
+          : "เกิดข้อผิดพลาดขณะลบโจทย์"
+      );
+    }
+  }
+
   const minX = points.length
     ? Math.min(...points.map((point) => point.x))
     : 0;
@@ -354,6 +397,7 @@ export default function GraphicalPage() {
             problems={history}
             loading={loadingHistory}
             onSelect={selectOldProblem}
+            onDelete={deleteOldProblem}
             onCancel={() => setShowHistory(false)}
           />
         ) : (
