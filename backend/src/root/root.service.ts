@@ -67,7 +67,7 @@ export class RootService {
 
     const newRoot = await this.rootModel.create({
       userId: userid,
-      type: '2',
+      type: '1',
       equation: equation,
       method : method,
       x0 : x0,
@@ -105,6 +105,6 @@ export class RootService {
       success: true,
       message: 'deleted',
     };
-    
+
   }
 }

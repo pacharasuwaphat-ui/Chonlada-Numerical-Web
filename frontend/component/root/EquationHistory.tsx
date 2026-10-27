@@ -7,8 +7,9 @@ export interface OldProblem {
   _id: string;
   userId: string;
   equation: string;
-  xl: number | string;
-  xr: number | string;
+  xl?: number | string;
+  xr?: number | string;
+  x0?: number | string;
   err: number | string;
   [key: string]: unknown;
 }
@@ -107,12 +108,15 @@ export default function EquationHistory({
                   </p>
 
                   <div className="mt-2 flex flex-wrap gap-2 text-xs text-slate-500">
-                    <span className="rounded-md bg-slate-100 px-2 py-1">
+                    {(problem.xl != null ) && (<span className="rounded-md bg-slate-100 px-2 py-1">
                       xL: {problem.xl}
-                    </span>
-                    <span className="rounded-md bg-slate-100 px-2 py-1">
+                    </span>)}
+                    {(problem.xr != null ) && (<span className="rounded-md bg-slate-100 px-2 py-1">
                       xR: {problem.xr}
-                    </span>
+                    </span>)}
+                    {(problem.x0 != null ) && (<span className="rounded-md bg-slate-100 px-2 py-1">
+                      x0: {problem.x0}
+                    </span>)}
                     <span className="rounded-md bg-slate-100 px-2 py-1">
                       Error: {problem.err}
                     </span>
