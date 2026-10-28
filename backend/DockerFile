@@ -10,6 +10,8 @@ RUN npm install
 COPY . .
 
 ENV MONGO_URI=mongodb://Chonlada:ChonladaPachara@ac-bxnh5dj-shard-00-00.t1zxkpe.mongodb.net:27017,ac-bxnh5dj-shard-00-01.t1zxkpe.mongodb.net:27017,ac-bxnh5dj-shard-00-02.t1zxkpe.mongodb.net:27017/Numer?ssl=true&replicaSet=atlas-3ktams-shard-0&authSource=admin
+ENV CORS_ORIGIN=https://chonlada-numerical-web.onrender.com/
+ENV FRONTEND_URL=https://chonlada-numerical-web.onrender.com/
 
 RUN npm run build
 
