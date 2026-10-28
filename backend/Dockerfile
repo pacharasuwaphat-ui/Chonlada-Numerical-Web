@@ -13,6 +13,7 @@ ENV MONGO_URI=mongodb://Chonlada:ChonladaPachara@ac-bxnh5dj-shard-00-00.t1zxkpe.
 ENV CORS_ORIGIN=https://chonlada-numerical-web.onrender.com
 ENV FRONTEND_URL=https://chonlada-numerical-web.onrender.com
 
+
 RUN npm run build
 
 # ---------- Stage 2: Production ----------
