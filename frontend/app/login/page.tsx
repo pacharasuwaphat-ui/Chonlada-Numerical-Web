@@ -66,7 +66,7 @@ export default function Login() {
       const destination =
         next?.startsWith("/") && !next.startsWith("//")
           ? next
-          : "/root/graphical";
+          : "/";
 
       router.replace(destination);
       router.refresh();
