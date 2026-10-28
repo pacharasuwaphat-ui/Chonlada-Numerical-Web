@@ -10,6 +10,7 @@ export type InterpolationPoint = {
 };
 
 export type InterpolationHistoryItem = {
+  _id: string;
   id: string;
   title: string;
   description?: string;

@@ -107,8 +107,10 @@ export default function LagrangePage() {
       const normalized: InterpolationHistoryItem[] = data.map(
         (item, index) => {
           const rawPoints = item.Points ?? [];
+          const problemId = String(item._id ?? item.id ?? index);
 
           return {
+            _id: problemId,
             id: String(item.id ?? item._id ?? index),
             title: `Lagrange Interpolation #${index + 1}`,
             description: `จำนวนจุด ${item.numberOfPoints}`,
@@ -367,6 +369,49 @@ export default function LagrangePage() {
     setMessage("โหลดโจทย์เก่าสำเร็จ");
   };
 
+  async function deleteOldProblem(problem: InterpolationHistoryItem) {
+     const confirmed = window.confirm(
+      `ต้องการลบโจทย์ใช่หรือไม่?`
+    );
+
+    if (!confirmed) return;
+
+    try {
+      const userString = localStorage.getItem("user");
+      if (!userString) {
+        setMessage("กรุณาเข้าสู่ระบบก่อน");
+        return;
+      }
+
+      
+      const user = JSON.parse(userString);
+      // console.log(problem)
+      // console.log(user.id)
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/inter/${problem._id}/${user.id}`,
+        {
+          method: "DELETE",
+        }
+      );
+      // const data = await res.json();
+      // console.log(data)
+      if (!res.ok) {
+        throw new Error("ลบโจทย์ไม่สำเร็จ");
+      }
+
+      fetchHistory()
+
+      setMessage("ลบโจทย์สำเร็จ");
+    } catch (error) {
+      setMessage(
+        error instanceof Error
+          ? error.message
+          : "เกิดข้อผิดพลาดขณะลบโจทย์"
+      );
+    }
+  }
+
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900">
       <InterpolationNavbar />
@@ -411,6 +456,7 @@ export default function LagrangePage() {
               items={historyItems}
               selectedId={selectedId}
               loading={loadingHistory}
+              onDelete={deleteOldProblem}
               onSelectChange={setSelectedId}
               onConfirm={handleSelectOld}
               onCancel={() => setShowHistory(false)}
