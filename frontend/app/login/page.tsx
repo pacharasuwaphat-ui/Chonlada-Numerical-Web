@@ -30,13 +30,14 @@ export default function Login() {
   };
 
   // ทำงานตอน submit form
-  const handleSubmit = async (e:any) => {
+  
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setMessage("");
     setLoading(true);
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+      const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -49,31 +50,33 @@ export default function Login() {
 
       const data = await res.json();
 
-      // ถ้า login ไม่สำเร็จ
       if (!res.ok) {
         setMessage(data.message || "Login failed");
-        setLoading(false);
         return;
       }
 
-      // ถ้า backend ส่ง token กลับมา ให้เก็บไว้
-      if (data.access_token) {
-        localStorage.setItem("access_token", data.access_token);
-      }
-
-      // จะเก็บ user ไว้ด้วยก็ได้
+      // เก็บข้อมูล user ได้ถ้าจำเป็น แต่ไม่เก็บ access token ใน localStorage
       if (data.user) {
         localStorage.setItem("user", JSON.stringify(data.user));
       }
 
-      // login สำเร็จแล้วเด้งไปหน้าที่ต้องการ
-      router.push("/root/graphical");
-    } catch (error) {
+      const next = new URLSearchParams(window.location.search).get("next");
+
+      // ป้องกัน redirect ไปเว็บไซต์ภายนอก
+      const destination =
+        next?.startsWith("/") && !next.startsWith("//")
+          ? next
+          : "/root/graphical";
+
+      router.replace(destination);
+      router.refresh();
+    } catch {
       setMessage("Cannot connect to server");
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white">
