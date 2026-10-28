@@ -4,8 +4,7 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 # ENV NEXT_PUBLIC_API_URL=https://lucktichai-backend.onrender.com
-ENV NEXT_PUBLIC_API_URL=http://172.17.48.1:4000
-ENV HOST=localhost
+ENV NEXT_PUBLIC_API_URL=https://chonlada-numerical-backend.onrender.com
 
 COPY package*.json ./
 RUN npm install
