@@ -26,7 +26,7 @@ export function middleware(request: NextRequest) {
 
   if (token && (pathname === "/login" || pathname === "/sign-up")) {
     return NextResponse.redirect(
-      new URL("/root/graphical", request.url)
+      new URL("/", request.url)
     );
   }
 
