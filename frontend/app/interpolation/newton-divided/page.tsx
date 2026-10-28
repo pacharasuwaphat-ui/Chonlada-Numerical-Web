@@ -226,6 +226,7 @@ export default function NewtonDividedPage() {
     try {
       const n = dataPoints.length;
 
+      //Dynamic Programming
       // table[i][order] stores the divided difference.
       const table: number[][] = Array.from(
         { length: n },
