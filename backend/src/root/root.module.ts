@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Root , RootSchema } from './schema/root.schema.js'
-import { RootController } from './root.colltroller.js';
+import { RootController } from './root.controller.js';
 import { RootService } from './root.service.js';
 
 @Module({

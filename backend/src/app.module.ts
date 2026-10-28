@@ -6,6 +6,7 @@ import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { AuthModule } from './auth/auth.module.js';
 import { RootModule } from './root/root.module.js';
+import { InterModule} from './inter/inter.module.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -24,6 +25,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     }),
     AuthModule,
     RootModule,
+    InterModule,
     
   ],
   controllers: [AppController],

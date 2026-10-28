@@ -25,13 +25,9 @@ type Coefficient = {
 type ApiOldProblem = {
   id?: string | number;
   _id?: string;
-  x: number | string;
-  n: number;
-  point?: {
-    xi: number | string;
-    fx: number | string;
-  }[];
-  points?: {
+  xValue: number | string;
+  numberOfPoints: number;
+  Points?: {
     xi: number | string;
     fx: number | string;
   }[];
@@ -93,7 +89,12 @@ export default function NewtonDividedPage() {
     setError("");
 
     try {
-      const response = await fetch(`${API_URL}/newtondivided`, {
+      const userString = localStorage.getItem("user");
+      if (!userString) return;
+
+      const user = JSON.parse(userString);
+      const userId = user.id;
+      const response = await fetch(`${API_URL}/inter/${userId}/newton-divided`, {
         cache: "no-store",
       });
 
@@ -105,13 +106,13 @@ export default function NewtonDividedPage() {
 
       const normalized: InterpolationHistoryItem[] = data.map(
         (item, index) => {
-          const rawPoints = item.point ?? item.points ?? [];
+          const rawPoints = item.Points ?? [];
 
           return {
             id: String(item.id ?? item._id ?? index),
             title: `Newton Divided Difference #${index + 1}`,
-            description: `จำนวนจุด ${item.n}`,
-            xValue: Number(item.x),
+            description: `จำนวนจุด ${item.numberOfPoints}`,
+            xValue: Number(item.xValue),
             points: rawPoints.map((point) => ({
               x: Number(point.xi),
               fx: Number(point.fx),
@@ -288,16 +289,22 @@ export default function NewtonDividedPage() {
       setSaving(true);
 
       try {
-        const response = await fetch(`${API_URL}/inter`, {
+        const userString = localStorage.getItem("user")
+        if (!userString) return;
+        const user = JSON.parse(userString);
+        const userId = user.id;
+
+        const response = await fetch(`${API_URL}/inter/save`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            x: targetX,
-            method: "newton",
-            n,
-            points: dataPoints.map((point) => ({
+            userid : userId,
+            xValue: targetX,
+            method: "newton-divided",
+            numberOfPoints : n,
+            Points: dataPoints.map((point) => ({
               xi: point.x,
               fx: point.fx,
             })),
@@ -336,7 +343,7 @@ export default function NewtonDividedPage() {
       MIN_POINTS,
       Math.min(
         MAX_POINTS,
-        raw?.n ?? restoredPoints.length
+        raw?.numberOfPoints ?? restoredPoints.length
       )
     );
 
@@ -357,11 +364,11 @@ export default function NewtonDividedPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f6f8fc] text-slate-900">
+    <main className="min-h-screen bg-slate-50 text-slate-900">
       <InterpolationNavbar />
 
       {/* One shared container aligns the header, cards and results. */}
-      <main className="mx-auto w-full max-w-7xl px-5 py-8 sm:px-8 lg:py-12">
+      <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:py-12">
         <header className="mb-8">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-violet-600">
             Numerical Methods / Interpolation
@@ -595,6 +602,6 @@ export default function NewtonDividedPage() {
           </div>
         )}
       </main>
-    </div>
+    </main>
   );
 }
