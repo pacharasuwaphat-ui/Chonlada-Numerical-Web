@@ -1,0 +1,21 @@
+node_modules
+dist
+.git
+.gitignore
+Dockerfile
+.dockerignore
+npm-debug.log
+
+# OS
+.DS_Store
+
+# logs
+logs
+*.log
+
+# test
+test
+coverage
+
+# env (ถ้าไม่อยากให้เข้า image)
+.env

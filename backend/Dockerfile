@@ -1,0 +1,32 @@
+# ---------- Stage 1: Build ----------
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+ENV PORT=4000
+ENV MONGO_URI=mongodb://root:root@localhost:27017/numer?authSource=admin
+
+ENV FRONTEND_URL=http://172.17.48.1:3000
+ENV CORS_ORIGIN=http://172.17.48.1:3000
+
+RUN npm run build
+
+# ---------- Stage 2: Production ----------
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install --omit=dev
+
+COPY --from=builder /app/dist ./dist
+
+EXPOSE 4000
+
+CMD ["node", "dist/main.js"]

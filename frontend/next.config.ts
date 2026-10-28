@@ -1,15 +1,18 @@
+
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  allowedDevOrigins: process.env.IP
-  ? [process.env.IP]
-  : [],
-  experimental: {
-    agentFeedback: true,
-  },
+  ...(process.env.NODE_ENV === "development"
+    ? {
+        allowedDevOrigins: process.env.IP
+          ? [process.env.IP]
+          : [],
+      }
+    : {}),
+
   cacheComponents: true,
   partialPrefetching: true,
+
   turbopack: {
     rules: {
       "*.css": {
