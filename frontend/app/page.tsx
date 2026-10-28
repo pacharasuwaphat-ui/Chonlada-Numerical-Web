@@ -223,7 +223,7 @@ export default function HomePage() {
           <h1 className="mt-4 text-4xl font-bold leading-tight tracking-tight text-slate-950 sm:text-5xl lg:text-6xl">
             Numerical Methods
             <span className="mt-2 block text-violet-600">
-              By Chonlada Buapim 6704062617105
+              By Chonlada Buapim 6704062617296
             </span>
           </h1>
 
